@@ -1,0 +1,699 @@
+{
+  "name": "Personal Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "inputText": "=Subject: {{ $json.Subject }}\nBody:{{ $json.snippet }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "Promotions",
+              "description": "emails that are come to sell any service or product to me"
+            },
+            {
+              "category": "Social",
+              "description": "emails that are coming from social media platforms like YouTube, Facebook, Instagram"
+            },
+            {
+              "category": "University",
+              "description": "email that are coming from the university telling an important message to me about the academic process "
+            },
+            {
+              "category": "Personal",
+              "description": "emails that are coming from friends"
+            },
+            {
+              "category": "Others",
+              "description": "all emails that are not included above category"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        -100,
+        0
+      ],
+      "id": "56822c02-85da-483b-a698-1d680ef9d161",
+      "name": "Text Classifier"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -200,
+        200
+      ],
+      "id": "8dc1ed9f-2894-4ed6-af13-8e1bf564fa23",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "QlgH0Ml40hx5frm7",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "CATEGORY_PROMOTIONS"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        400,
+        -360
+      ],
+      "id": "70d7367d-45e2-45c3-af89-60306576cdc6",
+      "name": "Promotions",
+      "webhookId": "f3e5bab1-daed-43dc-a7f5-184829b36406",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "deJGC2eAOuCx2gxg",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "CATEGORY_SOCIAL"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        400,
+        -200
+      ],
+      "id": "1ef981c7-117e-4039-84b0-eb1d17b4bdb9",
+      "name": "Social",
+      "webhookId": "f3e5bab1-daed-43dc-a7f5-184829b36406",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "deJGC2eAOuCx2gxg",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_7442693528793407569"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        400,
+        -20
+      ],
+      "id": "2810b010-d3c9-41c7-be34-e020c3aa4807",
+      "name": "University",
+      "webhookId": "f3e5bab1-daed-43dc-a7f5-184829b36406",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "deJGC2eAOuCx2gxg",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_6975799419416634851"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        400,
+        140
+      ],
+      "id": "da338164-c61c-4ebf-8bea-2111048ddd33",
+      "name": "Personal",
+      "webhookId": "f3e5bab1-daed-43dc-a7f5-184829b36406",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "deJGC2eAOuCx2gxg",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_1425323650895173013"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        400,
+        320
+      ],
+      "id": "af10bded-b1bb-4b3e-be74-c633a6ee6875",
+      "name": "Others",
+      "webhookId": "f3e5bab1-daed-43dc-a7f5-184829b36406",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "deJGC2eAOuCx2gxg",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        680,
+        -360
+      ],
+      "id": "2cd0a6d2-e56c-42a5-8187-ae2a3d325cba",
+      "name": "Gmail",
+      "webhookId": "f254b1b1-033c-4896-b19c-efd9fd173817",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "deJGC2eAOuCx2gxg",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are an intelligent agent. you should reply to the emails that coming from the friends. answer their questions as suitable.",
+              "role": "system"
+            },
+            {
+              "content": "=here's the email:\nSubject: {{ $('Gmail3').item.json.Subject }}\nbody:{{ $('Gmail3').item.json.snippet }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        620,
+        140
+      ],
+      "id": "b9713918-dc44-4b46-8fca-73cedcf912c8",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "zkN5si9CUsnGFazH",
+          "name": "Message API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "reply",
+        "messageId": "={{ $('Personal').item.json.id }}",
+        "emailType": "text",
+        "message": "={{ $json.message.content }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        980,
+        140
+      ],
+      "id": "455d2cb4-3c26-4a99-a047-e8828a9596f2",
+      "name": "Gmail1",
+      "webhookId": "bf6da9df-1199-473b-8932-57732f22a7a6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "deJGC2eAOuCx2gxg",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -840,
+        360
+      ],
+      "id": "69c29ccf-2c6a-4be0-99ec-20f2a91ff0ff",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You should summarize the weather status and the calendar event",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -280,
+        640
+      ],
+      "id": "ea0932ea-6844-4fa5-83f4-6dbd6d41cc28",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "cityName": "colombo",
+        "language": "en"
+      },
+      "type": "n8n-nodes-base.openWeatherMapTool",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        880
+      ],
+      "id": "9ac21ca6-2da8-4a7c-a97d-9509b5d433fb",
+      "name": "OpenWeatherMap",
+      "credentials": {
+        "openWeatherMapApi": {
+          "id": "PjOb0ldza8l4NL1i",
+          "name": "OpenWeatherMap account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $execution.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -320,
+        880
+      ],
+      "id": "cf22ae5d-adda-4aee-8d7e-d7ba4a3b8206",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "anuththara970@gmail.com",
+          "mode": "list",
+          "cachedResultName": "anuththara970@gmail.com"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        60,
+        880
+      ],
+      "id": "26143116-eebe-4d3d-ba26-ecf82ef8c74e",
+      "name": "Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "49l8TyaMgbv2p4KH",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -520,
+        860
+      ],
+      "id": "6833bd54-47f8-409d-8973-8904aecf8557",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "p2aSCF86XdC68YvP",
+          "name": "AI Agent API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 1,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -380,
+        0
+      ],
+      "id": "7a7b4ff4-1faa-4b61-87ca-b55656f2cf73",
+      "name": "Gmail3",
+      "webhookId": "a5dc21c9-fac9-409e-97a4-cb54865244b9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "deJGC2eAOuCx2gxg",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are an intelligent agent for the summarize emails.",
+              "role": "system"
+            },
+            {
+              "content": "=Subject: {{ $('Gmail3').item.json.Subject }}\nBody:{{ $('Gmail3').item.json.snippet }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        620,
+        -20
+      ],
+      "id": "3dc559f2-7a2f-4cc4-9750-e16c2915736e",
+      "name": "OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "3GKMUHVzKfzYwKOo",
+          "name": "Summary API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "8076891308",
+        "text": "={{ $json.message.content }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1000,
+        -20
+      ],
+      "id": "ea93db6f-2109-4e08-ba7d-800d555161fe",
+      "name": "Telegram",
+      "webhookId": "75c2265d-8ca7-4be7-a683-c6af97ea80d2",
+      "credentials": {
+        "telegramApi": {
+          "id": "wF8hUYUbKymdNovg",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "8076891308",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        80,
+        640
+      ],
+      "id": "79ccb000-8746-4e9a-986b-7c6d089a3e5f",
+      "name": "Telegram1",
+      "webhookId": "75c2265d-8ca7-4be7-a683-c6af97ea80d2",
+      "credentials": {
+        "telegramApi": {
+          "id": "wF8hUYUbKymdNovg",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "Promotions",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Social",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "University",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Personal",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Others",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Promotions": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Personal": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Others": {
+      "main": [
+        []
+      ]
+    },
+    "University": {
+      "main": [
+        [
+          {
+            "node": "OpenAI1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Gmail1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Gmail3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenWeatherMap": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail3": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI1": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Social": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "39ab1442-01b6-4fb3-8f94-76b97dee40e3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "13869db5953b62c39795ca8adbb25df533baf353f14aad145605143505f4ed05"
+  },
+  "id": "k8iAyz4Voqdx5qhT",
+  "tags": []
+}
